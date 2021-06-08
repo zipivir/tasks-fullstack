@@ -31,9 +31,8 @@ Route::put('/tasks/{id}', 'App\Http\Controllers\TaskController@update');
 /**
  * Delete Task
  */
-Route::delete('/tasks/{task}', function (Task $task) {
-    //
-});
+Route::delete('/tasks/{id}', 'App\Http\Controllers\TaskController@delete');
+
 
 Route::get('/token', function (Request $request) {
     $token = $request->session()->token();

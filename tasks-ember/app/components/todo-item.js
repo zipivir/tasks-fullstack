@@ -7,25 +7,33 @@ import { tracked } from '@glimmer/tracking';
 export default class TodoItem extends Component {
   @service repo;
   @tracked editing = false;
+  @tracked new = this.args.newItem;
 
   @action
   startEditing() {
-    this.args.onStartEdit();
+    if (this.args.onStartEdit) this.args.onStartEdit();
     this.editing = true;
   }
 
   @action
   doneEditing(e) {
-    if (!this.editing) return;
-    let todoTitle = e.target.value;
+    if (!this.editing && !this.new) return;
+    let todoName = e.target.value.trim();
 
-    if (isBlank(todoTitle)) {
+    if (isBlank(todoName)) {
       this.removeTodo();
     } else {
-      set(this.args.todo, 'title', todoTitle.trim());
-      this.editing = false;
-      this.args.onEndEdit();
+      set(this.args.todo, 'name', todoName);
+      if (this.editing) {
+        const todo = {
+          "field": "name",
+          "value": todoName
+        };
+        this.repo.update(this.args.todo.id, todo);
+      } 
+      if (this.args.onEndEdit) this.args.onEndEdit();      
     }
+    this.editing = false;
   }
 
   @action
@@ -39,8 +47,12 @@ export default class TodoItem extends Component {
 
   @action
   toggleCompleted(e) {
-    set(this.args.todo, 'completed', e.target.checked);
-    this.repo.persist();
+    const todo = {
+      "field": "done",
+      "value": !this.args.todo.done
+    };
+    this.repo.update(this.args.todo.id, todo);
+    set(this.args.todo, 'done', !this.args.todo.done);
   }
 
   @action

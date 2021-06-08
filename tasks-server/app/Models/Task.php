@@ -9,6 +9,8 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'done'];
+
     public static $rules = [
         'name' => 'required|unique:tasks,name'
     ];

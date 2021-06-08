@@ -9,11 +9,8 @@
       >
       <label for="toggle-all">Mark all as complete</label>
     {{/if}} --}}
+
     <ul class="todo-list">
-      <li id="list-header">
-        <h3>משימות</h3>
-        <button class="new-task" {{on "click" this.createTodo}} type="button"></button>
-      </li>
       {{#each @todos as |todo|}}
         <TodoItem
           @todo={{todo}}

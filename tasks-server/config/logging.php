@@ -39,6 +39,8 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
+            'level' => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/laravel.log'),
         ],
 
         'single' => [
@@ -85,6 +87,7 @@ return [
         'syslog' => [
             'driver' => 'syslog',
             'level' => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/laravel.log'),
         ],
 
         'errorlog' => [

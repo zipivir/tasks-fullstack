@@ -1,15 +1,21 @@
-<li class="{{if @todo.completed "completed"}} {{if this.editing "editing"}}">
+<li class="{{if @todo.done "completed"}} {{if this.editing "editing"}} {{if this.new "new"}}">
   <div class="view">
-    <input
+    {{!-- <input
       class="toggle"
       type="checkbox"
-      checked={{@todo.completed}}
+      checked={{@todo.done}}
       {{on "change" this.toggleCompleted}}
-    >
-    <label {{on "dblclick" this.startEditing}}>{{@todo.name}}</label>
-    <button class="destroy" {{on "click" this.removeTodo}} type="button"></button>
+    > --}}
+    <button class="toggle" 
+      {{on "click" this.toggleCompleted}}
+      {{!-- disabled="{{if @todo.done true}}"  --}}
+      type="button">
+    </button>
+    <label {{on "dblclick" this.startEditing}} disabled="{{if @todo.done true}}">
+      <strong>{{@todo.id}}.</strong>{{@todo.name}}
+    </label>
+    <button class="destroy" {{on "click" this.removeTodo}} type="button">X</button>
   </div>
-  {{#if this.editing}}
     <input
       class="edit"
       value={{@todo.name}}
@@ -17,5 +23,4 @@
       {{on "keyup" this.handleKeyup}}
       {{autofocus}}
     >
-  {{/if}}
 </li>

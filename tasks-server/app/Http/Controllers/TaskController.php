@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\Task;
 use DB;
 
 class TaskController extends Controller
@@ -15,8 +17,8 @@ class TaskController extends Controller
 
     public function create(Request $request)
     {
-        // $logger->info('request '.$request);
-        $task = DB::table('tasks')->insert([
+        Log::debug('create task request: '.$request);
+        $task = Task::create([
             'name' => $request->name,
             'done' => false
         ]);
@@ -25,9 +27,19 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
+        Log::debug('update task request: '.$request);
+        $task = DB::table('tasks')
+                ->where('id', $id)
+                ->update([$request->field => $request->value]);
+        return $task;
+    }
+
+    public function delete(Request $request, $id)
+    {
         // $logger->info('request '.$request);
         $task = DB::table('tasks')
                 ->where('id', $id)
-                ->update(['done' => $request->done]);
+                ->delete();
+        return $task;
     }
 }
